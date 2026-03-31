@@ -8,22 +8,27 @@ export function GenericForm() {
     email: '',
     phone: '',
     course: '',
-    grade: ''
+    grade: '',
+    isAccepted: false
   });
 
   const [activeDropdown, setActiveDropdown] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
-    setActiveDropdown(null); // Fecha a seta ao selecionar uma opção
+    if (type !== 'checkbox') setActiveDropdown(null);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.isAccepted) {
+      alert('Você precisa aceitar os termos para prosseguir.');
+      return;
+    }
     console.log('Form Submit:', formData);
     alert('Formulário enviado com sucesso!');
   };
@@ -120,16 +125,24 @@ export function GenericForm() {
         </div>
       </div>
 
-      <button type="submit" className="form-submit-btn">
+      <div className="form-group-checkbox">
+        <input 
+          type="checkbox" 
+          id="isAccepted" 
+          name="isAccepted"
+          checked={formData.isAccepted}
+          onChange={handleChange}
+          required
+        />
+        <label htmlFor="isAccepted">
+          Eu li e aceito a <Link to="/privacidade" className="form-legal-link">Política de Privacidade</Link> e os <Link to="/termos" className="form-legal-link">Termos de Uso</Link>
+        </label>
+      </div>
+
+      <button type="submit" className="form-submit-btn" disabled={!formData.isAccepted}>
         Aplicar para demo
       </button>
 
-      <p className="form-legal-text">
-        Ao enviar, você concorda com a nossa{' '}
-        <Link to="/privacidade" className="form-legal-link">Política de Privacidade</Link>{' '}
-        e os{' '}
-        <Link to="/termos" className="form-legal-link">Termos de Uso</Link>.
-      </p>
     </form>
   );
 }
