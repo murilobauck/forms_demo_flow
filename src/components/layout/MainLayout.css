@@ -1,8 +1,8 @@
 .main-layout-container {
-  width: calc(100% - 40px);
+  width: 90%;
   max-width: 600px;
-  height: calc(100% - 80px);
-  max-height: 800px;
+  height: 80%;
+  max-height: 700px; /* Reduzido para dar mais sensação de 'flutuar' */
   margin: auto;
   
   background-color: var(--color-surface);
@@ -12,7 +12,8 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  padding: 40px 10px 40px 40px; /* Reduzi padding-right de 40px para 10px */
+  padding: 40px 10px 40px 40px;
+  z-index: 10;
 }
 
 .content-wrapper {
