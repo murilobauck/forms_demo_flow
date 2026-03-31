@@ -24,7 +24,7 @@ export function TermsOfUse() {
           <h2>2. Elegibilidade</h2>
           <p>
             O programa de Acesso Antecipado é destinado a estudantes regularmente matriculados 
-            nos cursos técnicos listados no formulário. Ao se inscrever, você confirma que as 
+            nos cursos técnicos da ETEC Bento Quirino. Ao se inscrever, você confirma que as 
             informações fornecidas são verdadeiras e que possui vínculo ativo com a instituição.
           </p>
         </section>

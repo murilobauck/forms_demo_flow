@@ -15,7 +15,13 @@ export function GenericForm() {
   const [activeDropdown, setActiveDropdown] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    let { name, value, type, checked } = e.target;
+
+    // Sanitização básica: previne envio de scripts (XSS) ou delimitadores comuns em SQLi
+    if (type === 'text' || type === 'email' || type === 'tel') {
+      value = value.replace(/[<>;="]/g, '');
+    }
+
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -47,6 +53,9 @@ export function GenericForm() {
           placeholder="Digite seu nome completo"
           value={formData.name}
           onChange={handleChange}
+          maxLength={100}
+          pattern="[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\s]{2,100}"
+          title="Apenas letras e espaços (Ex: João da Silva). O campo foi restringido a 100 caracteres."
           required
         />
       </div>
@@ -61,6 +70,8 @@ export function GenericForm() {
           placeholder="seu@email.com"
           value={formData.email}
           onChange={handleChange}
+          maxLength={100}
+          title="Insira um e-mail válido com até 100 caracteres."
           required
         />
       </div>
@@ -75,6 +86,9 @@ export function GenericForm() {
           placeholder="(11) 99999-9999"
           value={formData.phone}
           onChange={handleChange}
+          maxLength={15}
+          pattern="[\d\s\-\(\)]{10,15}"
+          title="Apenas números, parênteses, espaços e traços. Exemplo: (11) 99999-9999"
           required
         />
       </div>
