@@ -72,40 +72,44 @@ export function GenericForm() {
 
       <div className="form-group">
         <label htmlFor="course" className="form-label">Curso</label>
-        <select 
-          id="course"
-          name="course"
-          className="form-input" 
-          value={formData.course}
-          onChange={handleChange}
-          required
-        >
-          <option value="" disabled>Selecione um curso</option>
-          <option value="Administração">Administração</option>
-          <option value="Logística">Logística</option>
-          <option value="Desenvolvimento de Sistemas">Desenvolvimento de Sistemas</option>
-          <option value="Desenvolvimento de Sistemas - AMS">Desenvolvimento de Sistemas - AMS</option>
-          <option value="Eletrônica">Eletrônica</option>
-          <option value="Eletrotécnica">Eletrotécnica</option>
-          <option value="Mecânica">Mecânica</option>
-        </select>
+        <div className="form-select-wrapper">
+          <select 
+            id="course"
+            name="course"
+            className="form-input" 
+            value={formData.course}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled>Selecione um curso</option>
+            <option value="Administração">Administração</option>
+            <option value="Logística">Logística</option>
+            <option value="Desenvolvimento de Sistemas">Desenvolvimento de Sistemas</option>
+            <option value="Desenvolvimento de Sistemas - AMS">Desenvolvimento de Sistemas - AMS</option>
+            <option value="Eletrônica">Eletrônica</option>
+            <option value="Eletrotécnica">Eletrotécnica</option>
+            <option value="Mecânica">Mecânica</option>
+          </select>
+        </div>
       </div>
 
       <div className="form-group">
         <label htmlFor="grade" className="form-label">Série</label>
-        <select 
-          id="grade"
-          name="grade"
-          className="form-input" 
-          value={formData.grade}
-          onChange={handleChange}
-          required
-        >
-          <option value="" disabled>Selecione sua série</option>
-          <option value="1º">1º</option>
-          <option value="2º">2º</option>
-          <option value="3º">3º</option>
-        </select>
+        <div className="form-select-wrapper">
+          <select 
+            id="grade"
+            name="grade"
+            className="form-input" 
+            value={formData.grade}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled>Selecione sua série</option>
+            <option value="1º">1º</option>
+            <option value="2º">2º</option>
+            <option value="3º">3º</option>
+          </select>
+        </div>
       </div>
 
       <button type="submit" className="form-submit-btn">
