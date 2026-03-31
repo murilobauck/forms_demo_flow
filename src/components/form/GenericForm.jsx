@@ -37,6 +37,16 @@ export function GenericForm() {
     }
     console.log('Form Submit:', formData);
     alert('Formulário enviado com sucesso!');
+    
+    // Limpa os campos após o envio
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      course: '',
+      grade: '',
+      isAccepted: false
+    });
   };
 
   return (
