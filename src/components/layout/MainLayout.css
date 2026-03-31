@@ -39,28 +39,20 @@
 }
 
 .scroll-track-pill {
-  width: 4px; /* Mais discreto (4px em vez de 10px) */
-  height: 190px;
-  background-color: rgba(255, 255, 255, 0.08); /* Ainda mais sutil */
+  width: 4px;
+  height: 120px; /* Reduzido de 190px para 120px */
+  background-color: rgba(255, 255, 255, 0.08);
   border-radius: 100px;
   position: relative;
-  cursor: pointer; /* Indica que pode interagir */
 }
 
 .scroll-thumb-pill {
   width: 4px;
-  height: 55px;
-  background-color: var(--color-primary); /* DB2164 */
+  height: 35px; /* Reduzido proporcionalmente (de 55px para 35px) */
+  background-color: var(--color-primary);
   border-radius: 100px;
   position: absolute;
   top: 0;
   left: 0;
   transition: transform 0.05s linear;
-  cursor: grab;
 }
-
-.scroll-thumb-pill:active {
-  cursor: grabbing;
-}
-
-

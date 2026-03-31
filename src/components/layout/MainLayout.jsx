@@ -7,6 +7,10 @@ export function MainLayout({ children }) {
   const [scrollPercentage, setScrollPercentage] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
+  // Constantes para fácil manutenção
+  const TRACK_HEIGHT = 120;
+  const THUMB_HEIGHT = 35;
+
   const updateScrollFromElement = useCallback(() => {
     if (contentRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
@@ -32,24 +36,16 @@ export function MainLayout({ children }) {
     if (!isDragging || !trackRef.current || !contentRef.current) return;
 
     const trackRect = trackRef.current.getBoundingClientRect();
-    const trackHeight = 190;
-    const thumbHeight = 55;
+    const availableSpace = TRACK_HEIGHT - THUMB_HEIGHT;
     
-    // Calcula a posição do mouse relativa ao topo da track
     let relativeY = e.clientY - trackRect.top;
-    
-    // Centraliza o clique no thumb para um feeling melhor ou usa a posição exata?
-    // Vamos apenas mapear a posição do mouse no espaço de 135px (190 - 55)
-    // Subtrai metade da altura do thumb para que o mouse fique no meio dele
-    let availableSpace = trackHeight - thumbHeight;
-    let newThumbPos = Math.max(0, Math.min(relativeY - (thumbHeight / 2), availableSpace));
+    let newThumbPos = Math.max(0, Math.min(relativeY - (THUMB_HEIGHT / 2), availableSpace));
     
     const newPercentage = (newThumbPos / availableSpace) * 100;
     
-    // Atualiza o scroll do elemento real
     const { scrollHeight, clientHeight } = contentRef.current;
     contentRef.current.scrollTop = (newPercentage / 100) * (scrollHeight - clientHeight);
-  }, [isDragging]);
+  }, [isDragging, TRACK_HEIGHT, THUMB_HEIGHT]);
 
   const stopDragging = useCallback(() => {
     setIsDragging(false);
@@ -74,7 +70,7 @@ export function MainLayout({ children }) {
     setIsDragging(true);
   };
 
-  const scrollThumbPosition = (scrollPercentage / 100) * (190 - 55);
+  const scrollThumbPosition = (scrollPercentage / 100) * (TRACK_HEIGHT - THUMB_HEIGHT);
 
   return (
     <main className="main-layout-container">
@@ -87,7 +83,6 @@ export function MainLayout({ children }) {
           className="scroll-track-pill" 
           ref={trackRef}
           onMouseDown={(e) => {
-            // Se clicar na trilha, já move o scroll para lá e começa o drag
             setIsDragging(true);
             handleDrag(e);
           }}
