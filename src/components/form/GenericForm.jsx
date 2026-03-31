@@ -158,7 +158,7 @@ export function GenericForm() {
           onChange={handleChange}
           required
         />
-        <label htmlFor="isAccepted">
+        <label>
           Eu li e aceito a <Link to="/privacidade" className="form-legal-link">Política de Privacidade</Link> e os <Link to="/termos" className="form-legal-link">Termos de Uso</Link>
         </label>
       </div>

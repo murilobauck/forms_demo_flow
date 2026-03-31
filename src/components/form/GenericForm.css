@@ -131,7 +131,6 @@ select.form-input option {
   align-items: flex-start;
   gap: 12px;
   margin-top: 8px;
-  cursor: pointer;
 }
 
 .form-group-checkbox input[type="checkbox"] {
@@ -146,7 +145,6 @@ select.form-input option {
   font-size: 0.85rem;
   color: var(--color-text-secondary);
   line-height: 1.5;
-  cursor: pointer;
 }
 
 .form-legal-text {
