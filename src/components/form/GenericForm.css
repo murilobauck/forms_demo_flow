@@ -88,6 +88,15 @@ select.form-input option {
   color: rgba(255, 255, 255, 0.2);
 }
 
+/* Evita que o preenchimento automático (autofill) do navegador mude o fundo para branco */
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus,
+.form-input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: var(--color-text) !important;
+}
+
 .form-submit-btn {
   margin-top: 16px;
   padding: 16px;
