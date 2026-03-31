@@ -1,0 +1,12 @@
+:root {
+  --color-primary: #DB2164;
+  --color-surface: #2c2c2e;
+  --color-background-fallback: #121214;
+  --color-text: #ffffff;
+  --color-text-secondary: #a0a0a5;
+  
+  --shadow-main: 25px 35px 15px 0px rgba(0, 0, 0, 0.3);
+  --border-radius-main: 32px;
+  
+  --font-family-main: 'Inter', system-ui, -apple-system, sans-serif;
+}
