@@ -1,7 +1,8 @@
 .main-layout-container {
-  width: 90vw;
-  max-width: 800px;
-  height: 85vh;
+  width: calc(100% - 40px); /* Sempre terá 20px de borda invisível no mínimo */
+  max-width: 600px;
+  height: calc(100% - 80px); /* Pelo menos 40px livres no topo e base */
+  max-height: 800px;
   margin: auto;
   
   background-color: var(--color-surface);
@@ -12,27 +13,32 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  padding: 40px 16px 40px 40px; /* Padding no conteiner permite o scrollbar ter espaço ao seu redor */
 }
 
 .content-wrapper {
   flex: 1;
   overflow-y: auto;
-  padding: 40px;
-  /* Personalize scrollbar to match the pink side */
+  padding-right: 24px; /* Espaço entre o fomulário e a barra de scroll */
 }
 
-/* Customizing scrollbar matching the #DB2164 color requirement for the side */
+/* Base "pill" que não se mexe */
 .content-wrapper::-webkit-scrollbar {
-  width: 6px;
+  width: 8px; /* Espessura da pílula */
 }
 
+/* A estrutura do fundo (pílula clara) */
 .content-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  background-color: rgba(255, 255, 255, 0.15); /* Cinza claro/translúcido, não se mexe */
+  border-radius: 100px;
+  /* Margens adicionais acima/abaixo para separar do limite exato do clip mask e não tocar a borda */
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
+/* A pílula menor dentro, que se move (rosa) */
 .content-wrapper::-webkit-scrollbar-thumb {
   background-color: var(--color-primary); /* DB2164 */
-  border-radius: 10px;
+  border-radius: 100px;
 }
+
