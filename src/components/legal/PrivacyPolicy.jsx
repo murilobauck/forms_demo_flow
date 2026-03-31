@@ -70,7 +70,7 @@ export function PrivacyPolicy() {
           <h2>6. Contato</h2>
           <p>
             Para exercer seus direitos ou esclarecer dúvidas sobre esta política, entre em contato 
-            conosco através do e-mail disponibilizado no programa.
+            conosco através do e-mail <span style={{ color: 'var(--color-primary)', fontWeight: '600' }}>murilobauck2@gmail.com</span>.
           </p>
         </section>
 

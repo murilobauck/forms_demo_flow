@@ -71,7 +71,7 @@ export function TermsOfUse() {
           <h2>7. Contato</h2>
           <p>
             Em caso de dúvidas sobre estes Termos de Uso, entre em contato conosco através 
-            do e-mail disponibilizado no programa.
+            do e-mail <span style={{ color: 'var(--color-primary)', fontWeight: '600' }}>murilobauck2@gmail.com</span>.
           </p>
         </section>
 
