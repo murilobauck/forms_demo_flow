@@ -1,7 +1,7 @@
 .main-layout-container {
-  width: calc(100% - 40px); /* Sempre terá 20px de borda invisível no mínimo */
+  width: calc(100% - 40px);
   max-width: 600px;
-  height: calc(100% - 80px); /* Pelo menos 40px livres no topo e base */
+  height: calc(100% - 80px);
   max-height: 800px;
   margin: auto;
   
@@ -9,36 +9,53 @@
   border-radius: var(--border-radius-main);
   box-shadow: var(--shadow-main);
   
-  /* Scroll reference logic */
   position: relative;
   display: flex;
-  flex-direction: column;
-  padding: 40px 16px 40px 40px; /* Padding no conteiner permite o scrollbar ter espaço ao seu redor */
+  flex-direction: row; /* Alterado para row para posicionar o scroll ao lado */
+  padding: 40px;
 }
 
 .content-wrapper {
   flex: 1;
   overflow-y: auto;
-  padding-right: 24px; /* Espaço entre o fomulário e a barra de scroll */
+  padding-right: 20px;
 }
 
-/* Base "pill" que não se mexe */
+/* Esconder a scrollbar nativa para usar apenas nosso componente visual */
 .content-wrapper::-webkit-scrollbar {
-  width: 8px; /* Espessura da pílula */
+  display: none;
 }
 
-/* A estrutura do fundo (pílula clara) */
-.content-wrapper::-webkit-scrollbar-track {
-  background-color: rgba(255, 255, 255, 0.15); /* Cinza claro/translúcido, não se mexe */
+.content-wrapper {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Espaço para o indicador customizado */
+.custom-scroll-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px; /* Base de posicionamento na lateral */
+}
+
+.scroll-track-pill {
+  width: 10px;
+  height: 190px;
+  background-color: rgba(255, 255, 255, 0.15); /* Pílula clara mais visível */
   border-radius: 100px;
-  /* Margens adicionais acima/abaixo para separar do limite exato do clip mask e não tocar a borda */
-  margin-top: 10px;
-  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden; /* Thumb não vaza os limites */
 }
 
-/* A pílula menor dentro, que se move (rosa) */
-.content-wrapper::-webkit-scrollbar-thumb {
+.scroll-thumb-pill {
+  width: 10px;
+  height: 55px;
   background-color: var(--color-primary); /* DB2164 */
   border-radius: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.1s ease-out; /* Movimento suave ao scrollar */
 }
 
