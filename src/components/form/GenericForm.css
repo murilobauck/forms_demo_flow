@@ -108,15 +108,15 @@ select.form-input option {
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.form-submit-btn:hover {
+.form-submit-btn:not(:disabled):hover {
   opacity: 0.9;
   transform: translateY(-2px);
 }
 
-.form-submit-btn:active {
+.form-submit-btn:not(:disabled):active {
   transform: translateY(0);
 }
 
@@ -124,6 +124,16 @@ select.form-input option {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+}
+
+.form-submit-btn.success,
+.form-submit-btn.success:disabled {
+  background-color: #10B981; /* Verde de sucesso */
+  opacity: 1;
+  color: #ffffff;
+  transform: scale(1.02);
+  cursor: default;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .form-group-checkbox {

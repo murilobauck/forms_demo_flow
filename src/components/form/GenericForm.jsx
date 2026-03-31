@@ -13,6 +13,8 @@ export function GenericForm() {
   });
 
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState('idle');
+
 
   const handleChange = (e) => {
     let { name, value, type, checked } = e.target;
@@ -36,17 +38,21 @@ export function GenericForm() {
       return;
     }
     console.log('Form Submit:', formData);
-    alert('Formulário enviado com sucesso!');
     
-    // Limpa os campos após o envio
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      course: '',
-      grade: '',
-      isAccepted: false
-    });
+    setSubmitStatus('success');
+    
+    // Retorna ao estado normal e limpa o formulário após 2.5 segundos
+    setTimeout(() => {
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        course: '',
+        grade: '',
+        isAccepted: false
+      });
+      setSubmitStatus('idle');
+    }, 2500);
   };
 
   return (
@@ -163,8 +169,12 @@ export function GenericForm() {
         </label>
       </div>
 
-      <button type="submit" className="form-submit-btn" disabled={!formData.isAccepted}>
-        Aplicar para demo
+      <button 
+        type="submit" 
+        className={`form-submit-btn ${submitStatus === 'success' ? 'success' : ''}`}
+        disabled={!formData.isAccepted || submitStatus === 'success'}
+      >
+        {submitStatus === 'success' ? 'Enviado com sucesso!' : 'Aplicar para demo'}
       </button>
 
     </form>
