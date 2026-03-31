@@ -11,51 +11,56 @@
   
   position: relative;
   display: flex;
-  flex-direction: row; /* Alterado para row para posicionar o scroll ao lado */
-  padding: 40px;
+  flex-direction: row;
+  padding: 40px 10px 40px 40px; /* Reduzi padding-right de 40px para 10px */
 }
 
 .content-wrapper {
   flex: 1;
   overflow-y: auto;
-  padding-right: 20px;
+  padding-right: 15px; /* Menor espaço entre form e scroll */
 }
 
-/* Esconder a scrollbar nativa para usar apenas nosso componente visual */
+/* Esconder a scrollbar nativa */
 .content-wrapper::-webkit-scrollbar {
   display: none;
 }
 
 .content-wrapper {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Espaço para o indicador customizado */
 .custom-scroll-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px; /* Base de posicionamento na lateral */
+  width: 12px; /* Container mais estreito */
 }
 
 .scroll-track-pill {
-  width: 10px;
+  width: 4px; /* Mais discreto (4px em vez de 10px) */
   height: 190px;
-  background-color: rgba(255, 255, 255, 0.15); /* Pílula clara mais visível */
+  background-color: rgba(255, 255, 255, 0.08); /* Ainda mais sutil */
   border-radius: 100px;
   position: relative;
-  overflow: hidden; /* Thumb não vaza os limites */
+  cursor: pointer; /* Indica que pode interagir */
 }
 
 .scroll-thumb-pill {
-  width: 10px;
+  width: 4px;
   height: 55px;
   background-color: var(--color-primary); /* DB2164 */
   border-radius: 100px;
   position: absolute;
   top: 0;
   left: 0;
-  transition: transform 0.1s ease-out; /* Movimento suave ao scrollar */
+  transition: transform 0.05s linear;
+  cursor: grab;
 }
+
+.scroll-thumb-pill:active {
+  cursor: grabbing;
+}
+
 
