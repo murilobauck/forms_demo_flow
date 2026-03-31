@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './GenericForm.css';
 
 export function GenericForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    course: '',
-    grade: '',
-    isAccepted: false
+  const [formData, setFormData] = useState(() => {
+    const saved = sessionStorage.getItem('demoFormData');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Falha ao restaurar dados do formulário', e);
+      }
+    }
+    return {
+      name: '',
+      email: '',
+      phone: '',
+      course: '',
+      grade: '',
+      isAccepted: false
+    };
   });
+
+  useEffect(() => {
+    sessionStorage.setItem('demoFormData', JSON.stringify(formData));
+  }, [formData]);
 
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [submitStatus, setSubmitStatus] = useState('idle');
@@ -51,6 +65,7 @@ export function GenericForm() {
         grade: '',
         isAccepted: false
       });
+      sessionStorage.removeItem('demoFormData');
       setSubmitStatus('idle');
     }, 2500);
   };
