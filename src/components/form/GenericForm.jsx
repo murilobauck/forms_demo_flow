@@ -81,7 +81,7 @@ export function GenericForm() {
             name="course"
             className="form-input" 
             value={formData.course}
-            onFocus={() => setActiveDropdown('course')}
+            onClick={() => setActiveDropdown(prev => prev === 'course' ? null : 'course')}
             onBlur={() => setActiveDropdown(null)}
             onChange={handleChange}
             required
@@ -106,7 +106,7 @@ export function GenericForm() {
             name="grade"
             className="form-input" 
             value={formData.grade}
-            onFocus={() => setActiveDropdown('grade')}
+            onClick={() => setActiveDropdown(prev => prev === 'grade' ? null : 'grade')}
             onBlur={() => setActiveDropdown(null)}
             onChange={handleChange}
             required
