@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './GenericForm.css';
 
 export function GenericForm() {
@@ -122,6 +123,13 @@ export function GenericForm() {
       <button type="submit" className="form-submit-btn">
         Aplicar para demo
       </button>
+
+      <p className="form-legal-text">
+        Ao enviar, você concorda com a nossa{' '}
+        <Link to="/privacidade" className="form-legal-link">Política de Privacidade</Link>{' '}
+        e os{' '}
+        <Link to="/termos" className="form-legal-link">Termos de Uso</Link>.
+      </p>
     </form>
   );
 }

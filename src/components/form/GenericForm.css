@@ -119,3 +119,23 @@ select.form-input option {
 .form-submit-btn:active {
   transform: translateY(0);
 }
+
+.form-legal-text {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.5;
+  opacity: 0.7;
+}
+
+.form-legal-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.form-legal-link:hover {
+  opacity: 0.75;
+  text-decoration: underline;
+}
