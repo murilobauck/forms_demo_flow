@@ -5,7 +5,9 @@ export function GenericForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    phone: '',
+    course: '',
+    grade: ''
   });
 
   const handleChange = (e) => {
@@ -24,7 +26,7 @@ export function GenericForm() {
 
   return (
     <form className="form-container" onSubmit={handleSubmit}>
-      <h2 className="form-title">Entre em Contato</h2>
+      <h2 className="form-title">Acesso <span style={{ color: 'var(--color-primary)' }}>antecipado</span></h2>
       
       <div className="form-group">
         <label htmlFor="name" className="form-label">Nome Completo</label>
@@ -33,7 +35,7 @@ export function GenericForm() {
           id="name"
           name="name"
           className="form-input" 
-          placeholder="Digite seu nome"
+          placeholder="Digite seu nome completo"
           value={formData.name}
           onChange={handleChange}
           required
@@ -55,33 +57,59 @@ export function GenericForm() {
       </div>
 
       <div className="form-group">
-        <label htmlFor="message" className="form-label">Mensagem (Tente scrollar para ver o efeito)</label>
-        <textarea 
-          id="message"
-          name="message"
-          className="form-input" 
-          placeholder="Como podemos te ajudar?"
-          rows="6"
-          value={formData.message}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      {/* Some extra fields just to force a scroll in our container for demonstration */}
-      <div className="form-group">
-        <label htmlFor="phone" className="form-label">Telefone (Opcional)</label>
+        <label htmlFor="phone" className="form-label">Telefone</label>
         <input 
           type="tel" 
           id="phone"
           name="phone"
           className="form-input" 
           placeholder="(11) 99999-9999"
+          value={formData.phone}
+          onChange={handleChange}
+          required
         />
       </div>
 
+      <div className="form-group">
+        <label htmlFor="course" className="form-label">Curso</label>
+        <select 
+          id="course"
+          name="course"
+          className="form-input" 
+          value={formData.course}
+          onChange={handleChange}
+          required
+        >
+          <option value="" disabled>Selecione um curso</option>
+          <option value="Administração">Administração</option>
+          <option value="Logística">Logística</option>
+          <option value="Desenvolvimento de Sistemas">Desenvolvimento de Sistemas</option>
+          <option value="Desenvolvimento de Sistemas - AMS">Desenvolvimento de Sistemas - AMS</option>
+          <option value="Eletrônica">Eletrônica</option>
+          <option value="Eletrotécnica">Eletrotécnica</option>
+          <option value="Mecânica">Mecânica</option>
+        </select>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="grade" className="form-label">Série</label>
+        <select 
+          id="grade"
+          name="grade"
+          className="form-input" 
+          value={formData.grade}
+          onChange={handleChange}
+          required
+        >
+          <option value="" disabled>Selecione sua série</option>
+          <option value="1º">1º</option>
+          <option value="2º">2º</option>
+          <option value="3º">3º</option>
+        </select>
+      </div>
+
       <button type="submit" className="form-submit-btn">
-        Enviar Mensagem
+        Aplicar para demo
       </button>
     </form>
   );
