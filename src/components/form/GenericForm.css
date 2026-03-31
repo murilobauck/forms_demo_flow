@@ -61,7 +61,7 @@
   transition: transform 0.3s ease;
 }
 
-.form-select-wrapper:focus-within::after {
+.form-select-wrapper.is-open::after {
   /* Apontar para a direita quando expandido (focado) */
   transform: translateY(-50%) rotate(-90deg);
 }

@@ -10,12 +10,15 @@ export function GenericForm() {
     grade: ''
   });
 
+  const [activeDropdown, setActiveDropdown] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+    setActiveDropdown(null); // Fecha a seta ao selecionar uma opção
   };
 
   const handleSubmit = (e) => {
@@ -72,12 +75,14 @@ export function GenericForm() {
 
       <div className="form-group">
         <label htmlFor="course" className="form-label">Curso</label>
-        <div className="form-select-wrapper">
+        <div className={`form-select-wrapper ${activeDropdown === 'course' ? 'is-open' : ''}`}>
           <select 
             id="course"
             name="course"
             className="form-input" 
             value={formData.course}
+            onFocus={() => setActiveDropdown('course')}
+            onBlur={() => setActiveDropdown(null)}
             onChange={handleChange}
             required
           >
@@ -95,12 +100,14 @@ export function GenericForm() {
 
       <div className="form-group">
         <label htmlFor="grade" className="form-label">Série</label>
-        <div className="form-select-wrapper">
+        <div className={`form-select-wrapper ${activeDropdown === 'grade' ? 'is-open' : ''}`}>
           <select 
             id="grade"
             name="grade"
             className="form-input" 
             value={formData.grade}
+            onFocus={() => setActiveDropdown('grade')}
+            onBlur={() => setActiveDropdown(null)}
             onChange={handleChange}
             required
           >
