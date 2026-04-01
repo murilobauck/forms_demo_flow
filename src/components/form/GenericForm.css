@@ -136,6 +136,31 @@ select.form-input option {
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
+.form-submit-btn.loading {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .form-group-checkbox {
   display: flex;
   align-items: flex-start;

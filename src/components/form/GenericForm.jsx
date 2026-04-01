@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
 import './GenericForm.css';
 
 export function GenericForm() {
@@ -45,29 +46,65 @@ export function GenericForm() {
     if (type !== 'checkbox') setActiveDropdown(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.isAccepted) {
       alert('Você precisa aceitar os termos para prosseguir.');
       return;
     }
-    console.log('Form Submit:', formData);
     
-    setSubmitStatus('success');
-    
-    // Retorna ao estado normal e limpa o formulário após 2.5 segundos
-    setTimeout(() => {
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        course: '',
-        grade: '',
-        isAccepted: false
-      });
-      sessionStorage.removeItem('demoFormData');
-      setSubmitStatus('idle');
-    }, 2500);
+    try {
+      setSubmitStatus('loading'); // Inicia o estado de carregamento e bloqueia o botão
+
+      // 1. Capturar o IP do usuário (Recomendado pelo Marco Civil)
+      let userIp = null;
+      try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        userIp = ipData.ip;
+      } catch (ipError) {
+        console.warn('Não foi possível obter o IP:', ipError);
+      }
+
+      // 2. Registrar no banco com dados completos de consentimento e formulário
+      const { error } = await supabase
+        .from('leads')
+        .insert([
+          { 
+            name: formData.name, 
+            email: formData.email,
+            phone: formData.phone,
+            course: formData.course,
+            grade: formData.grade,
+            consent_marketing: formData.isAccepted, // Versão do aceite
+            consent_privacy_terms: formData.isAccepted,
+            ip_address: userIp
+            // O timestamp created_at será gerado automaticamente no Supabase (now())
+          }
+        ]);
+
+      if (error) throw error;
+      
+      setSubmitStatus('success');
+      
+      // Limpa os dados e reseta status
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          course: '',
+          grade: '',
+          isAccepted: false
+        });
+        sessionStorage.removeItem('demoFormData');
+        setSubmitStatus('idle');
+      }, 2500);
+
+    } catch (err) {
+      console.error('Erro ao registrar lead:', err);
+      alert('Houve um erro ao salvar suas informações. Tente novamente.');
+    }
   };
 
   return (
@@ -180,16 +217,19 @@ export function GenericForm() {
           required
         />
         <label>
-          Eu li e aceito a <Link to="/privacidade" className="form-legal-link">Política de Privacidade</Link> e os <Link to="/termos" className="form-legal-link">Termos de Uso</Link>
+          Concordo em receber comunicações e aceito a <Link to="/privacidade" className="form-legal-link">Política de Privacidade</Link> e os <Link to="/termos" className="form-legal-link">Termos de Uso</Link>
         </label>
       </div>
 
       <button 
         type="submit" 
-        className={`form-submit-btn ${submitStatus === 'success' ? 'success' : ''}`}
-        disabled={!formData.isAccepted || submitStatus === 'success'}
+        className={`form-submit-btn ${submitStatus}`}
+        disabled={!formData.isAccepted || submitStatus !== 'idle'}
       >
-        {submitStatus === 'success' ? 'Enviado com sucesso!' : 'Aplicar para demo'}
+        {submitStatus === 'loading' && <div className="btn-spinner"></div>}
+        {submitStatus === 'idle' && 'Aplicar para demo'}
+        {submitStatus === 'loading' && 'Enviando...'}
+        {submitStatus === 'success' && 'Enviado com sucesso!'}
       </button>
 
     </form>

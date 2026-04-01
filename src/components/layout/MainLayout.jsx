@@ -65,6 +65,46 @@ export function MainLayout({ children }) {
     };
   }, [isDragging, handleDrag, stopDragging]);
 
+  // Handle scroll events outside of the container
+  useEffect(() => {
+    let touchStartY = 0;
+
+    const handleGlobalWheel = (e) => {
+      if (!contentRef.current) return;
+      // Allow native scroll if target is within content-wrapper
+      if (contentRef.current.contains(e.target)) return;
+      
+      contentRef.current.scrollTop += e.deltaY;
+    };
+
+    const handleGlobalTouchStart = (e) => {
+      if (!contentRef.current) return;
+      if (contentRef.current.contains(e.target)) return;
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleGlobalTouchMove = (e) => {
+      if (!contentRef.current) return;
+      if (contentRef.current.contains(e.target)) return;
+      
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchY;
+      
+      contentRef.current.scrollTop += deltaY;
+      touchStartY = touchY;
+    };
+
+    window.addEventListener('wheel', handleGlobalWheel, { passive: true });
+    window.addEventListener('touchstart', handleGlobalTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleGlobalTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleGlobalWheel);
+      window.removeEventListener('touchstart', handleGlobalTouchStart);
+      window.removeEventListener('touchmove', handleGlobalTouchMove);
+    };
+  }, []);
+
   const startDragging = (e) => {
     e.preventDefault();
     setIsDragging(true);
