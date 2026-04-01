@@ -1,7 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { logger } from '../../lib/logger';
 import './GenericForm.css';
+
+// Rate limiting por dispositivo: máximo 3 envios a cada 24h
+const MAX_SUBMISSIONS = 3;
+const RATE_LIMIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 horas
+
+function checkRateLimit() {
+  try {
+    const stored = localStorage.getItem('form_submissions');
+    if (!stored) return true;
+
+    const submissions = JSON.parse(stored);
+    const now = Date.now();
+
+    // Filtra apenas submissões dentro da janela de 24h
+    const recent = submissions.filter(
+      (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS
+    );
+
+    // Atualiza o storage removendo entradas expiradas
+    localStorage.setItem('form_submissions', JSON.stringify(recent));
+
+    return recent.length < MAX_SUBMISSIONS;
+  } catch {
+    return true; // Em caso de erro no localStorage, permite o envio
+  }
+}
+
+function recordSubmission() {
+  try {
+    const stored = localStorage.getItem('form_submissions');
+    const submissions = stored ? JSON.parse(stored) : [];
+    submissions.push(Date.now());
+    localStorage.setItem('form_submissions', JSON.stringify(submissions));
+  } catch {
+    // Silenciosamente ignora erros de localStorage
+  }
+}
+
+// Validação allow-list por tipo de campo
+const VALIDATORS = {
+  name:  /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\s]{2,100}$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone: /^[\d\s\-()]{10,15}$/,
+};
 
 export function GenericForm() {
   const [formData, setFormData] = useState(() => {
@@ -10,7 +55,7 @@ export function GenericForm() {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        console.error('Falha ao restaurar dados do formulário', e);
+        logger.error('Falha ao restaurar dados do formulário', e);
       }
     }
     return {
@@ -34,9 +79,16 @@ export function GenericForm() {
   const handleChange = (e) => {
     let { name, value, type, checked } = e.target;
 
-    // Sanitização básica: previne envio de scripts (XSS) ou delimitadores comuns em SQLi
-    if (type === 'text' || type === 'email' || type === 'tel') {
-      value = value.replace(/[<>;="]/g, '');
+    // Sanitização allow-list: aceita apenas caracteres válidos para cada tipo de campo
+    if (type === 'text') {
+      // Nome: apenas letras (com acentos), apóstrofo e espaços
+      value = value.replace(/[^A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\s]/g, '');
+    } else if (type === 'email') {
+      // Email: apenas caracteres válidos para endereços de e-mail
+      value = value.replace(/[^a-zA-Z0-9@._+\-]/g, '');
+    } else if (type === 'tel') {
+      // Telefone: apenas dígitos, espaços, parênteses e traço
+      value = value.replace(/[^\d\s\-()]/g, '');
     }
 
     setFormData(prev => ({
@@ -52,9 +104,29 @@ export function GenericForm() {
       alert('Você precisa aceitar os termos para prosseguir.');
       return;
     }
+
+    // Rate limiting por dispositivo
+    if (!checkRateLimit()) {
+      alert('Você já enviou o formulário recentemente. Tente novamente em algumas horas.');
+      return;
+    }
+
+    // Validação final allow-list antes do envio
+    if (!VALIDATORS.name.test(formData.name)) {
+      alert('Nome contém caracteres inválidos. Use apenas letras e espaços.');
+      return;
+    }
+    if (!VALIDATORS.email.test(formData.email)) {
+      alert('Por favor, insira um e-mail válido.');
+      return;
+    }
+    if (!VALIDATORS.phone.test(formData.phone)) {
+      alert('Telefone inválido. Use apenas números, parênteses, espaços e traços.');
+      return;
+    }
     
     try {
-      setSubmitStatus('loading'); // Inicia o estado de carregamento e bloqueia o botão
+      setSubmitStatus('loading');
 
       // 1. Capturar o IP do usuário (Recomendado pelo Marco Civil)
       let userIp = null;
@@ -63,7 +135,7 @@ export function GenericForm() {
         const ipData = await ipResponse.json();
         userIp = ipData.ip;
       } catch (ipError) {
-        console.warn('Não foi possível obter o IP:', ipError);
+        logger.warn('Não foi possível obter o IP:', ipError);
       }
 
       // 2. Registrar no banco com dados completos de consentimento e formulário
@@ -76,15 +148,15 @@ export function GenericForm() {
             phone: formData.phone,
             course: formData.course,
             grade: formData.grade,
-            consent_marketing: formData.isAccepted, // Versão do aceite
+            consent_marketing: formData.isAccepted,
             consent_privacy_terms: formData.isAccepted,
             ip_address: userIp
-            // O timestamp created_at será gerado automaticamente no Supabase (now())
           }
         ]);
 
       if (error) throw error;
       
+      recordSubmission();
       setSubmitStatus('success');
       
       // Limpa os dados e reseta status
@@ -102,7 +174,8 @@ export function GenericForm() {
       }, 2500);
 
     } catch (err) {
-      console.error('Erro ao registrar lead:', err);
+      logger.error('Erro ao registrar lead:', err);
+      setSubmitStatus('idle');
       alert('Houve um erro ao salvar suas informações. Tente novamente.');
     }
   };
